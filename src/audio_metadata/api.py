@@ -20,7 +20,8 @@ from .formats import (
 	FLAC,
 	MP3,
 	WAVE,
-	ID3v2,
+	MP4,
+        ID3v2,
 	MP3StreamInfo,
 	OggOpus,
 	OggVorbis,
@@ -67,6 +68,12 @@ def determine_format(data):
 
 	if d.startswith(b'RIFF'):
 		return WAVE
+
+	if (
+		d[4:8].lower() == b'ftyp'
+		and d[8:].lower().startswith((b'dash', b'm4a', b'mp4'))
+	):
+		return MP4
 
 	if d.startswith(b'ID3'):
 		ID3v2.parse(data)
